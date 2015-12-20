@@ -16,6 +16,9 @@ $di['router'] = function() use ($default_module, $modules, $di, $config) {
 	if(file_exists($moduleRouting) && is_file($moduleRouting)) {
 		$router = include $moduleRouting;
 	} else {
+
+		//All routes point to the default module. In our case the Frontend module
+
 		$router->add('#^/(|/)$#', array(
 			'module' => $default_module,
 			'controller' => 'index',
