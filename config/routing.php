@@ -11,12 +11,11 @@ $di['router'] = function() use ($default_module, $modules, $di, $config) {
 	//Removes all the pre-defined routes
 	$router->clear();
 
-	$moduleRouting = __DIR__.'/../apps/'.ucfirst($default_module).'/Config/routing.php';
+	$moduleRouting = __DIR__.'/../modules/'.ucfirst($default_module).'/Config/routing.php';
 
 	if(file_exists($moduleRouting) && is_file($moduleRouting)) {
 		$router = include $moduleRouting;
 	} else {
-
 		//All routes point to the default module. In our case the Frontend module
 
 		$router->add('#^/(|/)$#', array(
