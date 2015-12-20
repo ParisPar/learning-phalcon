@@ -19,7 +19,7 @@ class Bootstrap extends \Phalcon\Mvc\Application {
 				'className' => 'App\Frontend\Module',
 				'path'			=> __DIR__.'/Frontend/Module.php'
 			),
-			'backend' => array(
+			'backoffice' => array(
 				'className' => 'App\Backoffice\Module',
 				'path'			=> __DIR__.'/Backoffice/Module.php'
 			),
