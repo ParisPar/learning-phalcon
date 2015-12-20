@@ -56,6 +56,8 @@ class Bootstrap extends \Phalcon\Mvc\Application {
 		according to the module to be executed.
 		 */
 		$this->registerModules($this->modules);
+
+		echo $this->handle()->getContent();
 	}
 
 
