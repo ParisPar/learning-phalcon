@@ -9,6 +9,9 @@ mb_internal_encoding('UTF-8');
 
 require_once __DIR__.'/../modules/Bootstrap.php';
 
+//Add Composer autoloader
+require_once __DIR__.'/../vendor/autoload.php';
+
 $app = new Bootstrap('frontend');
 $app->init();
 
