@@ -35,7 +35,15 @@ $di['router'] = function() use ($default_module, $modules, $di, $config) {
 			'action' => 2,
 			'params' => 3
 		));
+	}
 
+	foreach($modules as $moduleName => $module) {
+
+		if($moduleName === $default_module)
+			continue;
+
+		$moduleRouting = __DIR__.'/../modules/'.ucfirst($moduleName).'/Config/routing.php';
+		include $moduleRouting;
 
 	}
 
