@@ -103,3 +103,13 @@ $di['core_article_manager'] = function() {
 	return new App\Core\Managers\ArticleManager();
 };
 
+$di['mongo'] = function() {
+	$mongo = new MongoClient();
+	return $mongo->selectDB('bitpress');
+};
+
+$di['collectionManager'] = function() {
+	return new \Phalcon\Mvc\Collection\Manager();
+};
+
+$di['modelsCache'] = $di['cache'];
