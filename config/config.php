@@ -19,4 +19,11 @@ return new \Phalcon\Config(array(
 			'dir' => __DIR__.'/../cache/volt'
 		)
 	),
+	'database' => array(
+		'adapter' => 'Mysql',
+		'host' => 'localhost',
+		'username' => 'phalcon_user',
+		'password' => 'password',
+		'dbname' => 'learning_phalcon'
+	)
 ));
