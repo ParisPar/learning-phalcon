@@ -2,7 +2,7 @@
 
 namespace App\Core\Managers;
 
-use App\Core\Models\Article
+use App\Core\Models\Article;
 
 class ArticleManager extends BaseManager {
 

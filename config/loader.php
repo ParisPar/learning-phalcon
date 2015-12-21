@@ -9,3 +9,4 @@ $loader->registerNamespaces(array(
 	'App\Backoffice'	=> __DIR__.'/../modules/Backoffice/',
 ));
 
+$loader->register();
