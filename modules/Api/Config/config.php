@@ -9,7 +9,7 @@ $module_config = new \Phalcon\Config(array(
 		'controllersDir' => __DIR__.'/../Controllers/',
 		'modelsDir' => __DIR__.'/../Models/',
 		'viewsDir' => __DIR__.'/../Views/',
-		'baseUri' => '/api/',
+		'baseUri' => '/learning-phalcon/api/',
 		'cryptSalt' => 'aoj90g89d5jgd95g8',
 		'publicUrl' => 'http://test.com/learning-phalcon/'
 	)
