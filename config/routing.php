@@ -14,7 +14,7 @@ $di['router'] = function() use ($default_module, $modules, $di, $config) {
 	$moduleRouting = __DIR__.'/../modules/'.ucfirst($default_module).'/Config/routing.php';
 
 	if(file_exists($moduleRouting) && is_file($moduleRouting)) {
-		$router = include $moduleRouting;
+		include $moduleRouting;
 	} else {
 		//All routes point to the default module. In our case the Frontend module
 
@@ -43,7 +43,9 @@ $di['router'] = function() use ($default_module, $modules, $di, $config) {
 			continue;
 
 		$moduleRouting = __DIR__.'/../modules/'.ucfirst($moduleName).'/Config/routing.php';
-		include $moduleRouting;
+
+		if(file_exists($moduleRouting) && is_file($moduleRouting))
+			include $moduleRouting;
 
 	}
 
