@@ -189,6 +189,8 @@ class Article extends Base
 
     public function initialize()
     {
+        
+        
         $this->hasMany('id', 'App\Core\Models\ArticleTranslation', 'article_translation_article_id', array(
             'alias' => 'translations',
             'foreignKey' => true
@@ -198,6 +200,10 @@ class Article extends Base
             'alias' => 'user',
             'reusable' => true
         ));
+
+        //Many to many relationships require 3 models
+        //hasManyToMany(var fields, string! intermediateModel, var intermediateFields, var intermediateReferencedFields,
+        //              string! referenceModel, var referencedFields, options = null)
 
         $this->hasManyToMany(
             "id",

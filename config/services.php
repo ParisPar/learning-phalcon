@@ -117,3 +117,7 @@ $di['modelsCache'] = $di['cache'];
 $di['core_user_manager'] = function() {
 	return new App\Core\Managers\UserManager();
 };
+
+$di['core_category_manager'] = function() {
+	return new App\Core\Managers\CategoryManager();
+};
