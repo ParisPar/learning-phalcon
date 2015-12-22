@@ -312,7 +312,7 @@ class User extends Base
     public function initialize()
     {
         $this->hasOne('id', 'App\Core\Models\UserProfile', 'user_profile_user_id', array(
-            'alias' => 'profile',
+            'alias' => 'profile',//We can access the profile like this: $user->profile
             'reusable' => true
         ));
 
@@ -321,6 +321,7 @@ class User extends Base
             'reusable' => true
         ));
 
+        //Set the model to automatically fill the created_at and updated_at fields
         $this->addBehavior(new Timestampable(array(
             'beforeValidationOnCreate' => array(
                 'field' => 'user_created_at',

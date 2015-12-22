@@ -113,3 +113,7 @@ $di['collectionManager'] = function() {
 };
 
 $di['modelsCache'] = $di['cache'];
+
+$di['core_user_manager'] = function() {
+	return new App\Core\Managers\UserManager();
+};
