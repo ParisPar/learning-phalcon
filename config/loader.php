@@ -9,4 +9,8 @@ $loader->registerNamespaces(array(
 	'App\Backoffice'	=> __DIR__.'/../modules/Backoffice/',
 ));
 
+$loader->registerDirs(array(
+	__DIR__.'/../modules/Task/'
+));
+
 $loader->register();
