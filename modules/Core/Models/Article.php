@@ -2,17 +2,47 @@
 
 namespace App\Core\Models;
 
+use \Phalcon\Mvc\Model\Behavior\Timestampable;
+
 class Article extends Base
 {
-    protected $id;
-    protected $article_short_title;
-    protected $article_long_title;
-    protected $article_slug;
-    protected $article_description;
-    protected $is_published;
-    protected $created_at;
-    protected $updated_at;
 
+    /**
+     *
+     * @var integer
+     */
+    protected $id;
+
+    /**
+     *
+     * @var integer
+     */
+    protected $article_user_id;
+
+    /**
+     *
+     * @var integer
+     */
+    protected $article_is_published;
+
+    /**
+     *
+     * @var string
+     */
+    protected $article_created_at;
+
+    /**
+     *
+     * @var string
+     */
+    protected $article_updated_at;
+
+    /**
+     * Method to set the value of field id
+     *
+     * @param integer $id
+     * @return $this
+     */
     public function setId($id)
     {
         $this->id = $id;
@@ -20,92 +50,188 @@ class Article extends Base
         return $this;
     }
 
-    public function setArticleShortTitle($article_short_title)
+    /**
+     * Method to set the value of field article_user_id
+     *
+     * @param integer $article_user_id
+     * @return $this
+     */
+    public function setArticleUserId($article_user_id)
     {
-        $this->article_short_title = $article_short_title;
+        $this->article_user_id = $article_user_id;
 
         return $this;
     }
 
-    public function setArticleLongTitle($article_long_title)
+    /**
+     * Method to set the value of field article_is_published
+     *
+     * @param integer $article_is_published
+     * @return $this
+     */
+    public function setArticleIsPublished($article_is_published)
     {
-        $this->article_long_title = $article_long_title;
+        $this->article_is_published = $article_is_published;
 
         return $this;
     }
 
-    public function setArticleSlug($article_slug)
+    /**
+     * Method to set the value of field article_created_at
+     *
+     * @param string $article_created_at
+     * @return $this
+     */
+    public function setArticleCreatedAt($article_created_at)
     {
-        $this->article_slug = $article_slug;
+        $this->article_created_at = $article_created_at;
 
         return $this;
     }
 
-    public function setArticleDescription($article_description)
+    /**
+     * Method to set the value of field article_updated_at
+     *
+     * @param string $article_updated_at
+     * @return $this
+     */
+    public function setArticleUpdatedAt($article_updated_at)
     {
-        $this->article_description = $article_description;
+        $this->article_updated_at = $article_updated_at;
 
         return $this;
     }
 
-    public function setIsPublished($is_published)
-    {
-        $this->is_published = $is_published;
-
-        return $this;
-    }
-
-    public function setCreatedAt($created_at)
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function setUpdatedAt($updated_at)
-    {
-        $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
+    /**
+     * Returns the value of field id
+     *
+     * @return integer
+     */
     public function getId()
     {
         return $this->id;
     }
 
-    public function getArticleShortTitle()
+    /**
+     * Returns the value of field article_user_id
+     *
+     * @return integer
+     */
+    public function getArticleUserId()
     {
-        return $this->article_short_title;
+        return $this->article_user_id;
     }
 
-    public function getArticleLongTitle()
+    /**
+     * Returns the value of field article_is_published
+     *
+     * @return integer
+     */
+    public function getArticleIsPublished()
     {
-        return $this->article_long_title;
+        return $this->article_is_published;
     }
 
-    public function getArticleSlug()
+    /**
+     * Returns the value of field article_created_at
+     *
+     * @return string
+     */
+    public function getArticleCreatedAt()
     {
-        return $this->article_slug;
+        return $this->article_created_at;
     }
 
-    public function getArticleDescription()
+    /**
+     * Returns the value of field article_updated_at
+     *
+     * @return string
+     */
+    public function getArticleUpdatedAt()
     {
-        return $this->article_description;
+        return $this->article_updated_at;
     }
 
-    public function getIsPublished()
+    public function getSource()
     {
-        return $this->is_published;
+        return 'article';
     }
 
-    public function getCreatedAt()
+    /**
+     * @return Article[]
+     */
+    public static function find($parameters = array())
     {
-        return $this->created_at;
+        return parent::find($parameters);
     }
 
-    public function getUpdatedAt()
+    /**
+     * @return Article
+     */
+    public static function findFirst($parameters = array())
     {
-        return $this->updated_at;
+        return parent::findFirst($parameters);
+    }
+
+    /**
+     * Independent Column Mapping.
+     */
+    public function columnMap()
+    {
+        return array(
+            'id' => 'id',
+            'article_user_id' => 'article_user_id',
+            'article_is_published' => 'article_is_published',
+            'article_created_at' => 'article_created_at',
+            'article_updated_at' => 'article_updated_at'
+        );
+    }
+
+    public function initialize()
+    {
+        $this->hasMany('id', 'App\Core\Models\ArticleTranslation', 'article_translation_article_id', array(
+            'alias' => 'translations',
+            'foreignKey' => true
+        ));
+
+        $this->hasOne('article_user_id', 'App\Core\Models\User', 'id', array(
+            'alias' => 'user',
+            'reusable' => true
+        ));
+
+        $this->hasManyToMany(
+            "id",
+            "App\Core\Models\ArticleHashtagArticle",
+            "article_id",
+            "hashtag_id",
+            "App\Core\Models\Hashtag",
+            "id",
+            array(
+                'alias' => 'hashtags'
+            )
+        );
+
+        $this->hasManyToMany(
+            "id",
+            "App\Core\Models\ArticleCategoryArticle",
+            "article_id",
+            "category_id",
+            "App\Core\Models\Category",
+            "id",
+            array(
+                'alias' => 'categories'
+            )
+        );
+
+        $this->addBehavior(new Timestampable(array(
+            'beforeValidationOnCreate' => array(
+                'field' => 'article_created_at',
+                'format' => 'Y-m-d H:i:s'
+            ),
+            'beforeValidationOnUpdate' => array(
+                'field' => 'article_updated_at',
+                'format' => 'Y-m-d H:i:s'
+            ),
+        )));
     }
 }

@@ -1,7 +1,7 @@
-<?php	
-
+<?php
 namespace App\Core\Models;
 
-class Base extends \Phalcon\Mvc\Model {
-	
+class Base extends \Phalcon\Mvc\Model
+{
+
 }
