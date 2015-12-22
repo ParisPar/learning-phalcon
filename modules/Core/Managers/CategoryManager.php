@@ -10,6 +10,8 @@ class CategoryManager extends BaseManager {
 
 	public function create(array $input_data) {
 
+		//Add some default data that can be overwritten by the input data using array_merge()
+		
 		$default_data = array(
 			'translations' => array(
 				'en' => array(
