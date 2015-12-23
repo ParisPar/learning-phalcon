@@ -193,7 +193,9 @@ class Article extends Base
 
       $this->hasMany('id', 'App\Core\Models\ArticleTranslation', 'article_translation_article_id', array(
             'alias' => 'translations',//We can access it like $article->translations
-            'foreignKey' => true
+            'foreignKey' => array(
+              'action' => \Phalcon\Mvc\Model\Relation::ACTION_CASCADE
+            )
           ));
 
           $this->hasOne('article_user_id', 'App\Core\Models\User', 'id', array(

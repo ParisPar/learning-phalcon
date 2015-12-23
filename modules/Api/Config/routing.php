@@ -22,5 +22,31 @@ $articles->addGet('',array(
 	'action'  => 'list'
 ));
 
+$articles->addGet('/{id}',array(
+	'module' => 'api',
+	'controller' => 'articles',
+	'action'  => 'get'
+));
+
+$articles->addPut('/{id}',array(
+	'module' => 'api',
+	'controller' => 'articles',
+	'action'  => 'update'
+));
+
+$articles->addDelete('/{id}',array(
+	'module' => 'api',
+	'controller' => 'articles',
+	'action'  => 'delete'
+));
+
+$articles->addPost('',array(
+	'module' => 'api',
+	'controller' => 'articles',
+	'action'  => 'create'
+));
+
+
+
 // Add the group to the router
 $router->mount($articles);

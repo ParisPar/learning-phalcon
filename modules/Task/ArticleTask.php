@@ -3,7 +3,7 @@
 class ArticleTask extends BaseTask {
 
 
-	//Example: $ php modules/cli.php article create 'Test programming title' 
+	//Example: $ php modules/cli.php article create 'Test programming title' 25
 	public function createAction($params = null) {
 
 		$manager = $this->getDI()->get('core_article_manager');
@@ -22,7 +22,9 @@ class ArticleTask extends BaseTask {
 						'article_translation_lang' => 'en'
 					)
 				),
-				'categories' => array()
+				'categories' => array(
+					$params[1]
+				)
 			)
 		);
 			$this->consoleLog(sprintf("The article has been created. ID: %d", $article->getId()));
