@@ -39,9 +39,9 @@ class Category extends Base
      */
     public function setId($id)
     {
-        $this->id = $id;
+      $this->id = $id;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -52,9 +52,9 @@ class Category extends Base
      */
     public function setCategoryIsActive($category_is_active)
     {
-        $this->category_is_active = $category_is_active;
+      $this->category_is_active = $category_is_active;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -65,9 +65,9 @@ class Category extends Base
      */
     public function setCategoryCreatedAt($category_created_at)
     {
-        $this->category_created_at = $category_created_at;
+      $this->category_created_at = $category_created_at;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -78,9 +78,9 @@ class Category extends Base
      */
     public function setCategoryUpdatedAt($category_updated_at)
     {
-        $this->category_updated_at = $category_updated_at;
+      $this->category_updated_at = $category_updated_at;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -90,7 +90,7 @@ class Category extends Base
      */
     public function getId()
     {
-        return $this->id;
+      return $this->id;
     }
 
     /**
@@ -100,7 +100,7 @@ class Category extends Base
      */
     public function getCategoryIsActive()
     {
-        return $this->category_is_active;
+      return $this->category_is_active;
     }
 
     /**
@@ -110,7 +110,7 @@ class Category extends Base
      */
     public function getCategoryCreatedAt()
     {
-        return $this->category_created_at;
+      return $this->category_created_at;
     }
 
     /**
@@ -120,12 +120,12 @@ class Category extends Base
      */
     public function getCategoryUpdatedAt()
     {
-        return $this->category_updated_at;
+      return $this->category_updated_at;
     }
 
     public function getSource()
     {
-        return 'category';
+      return 'category';
     }
 
     /**
@@ -133,7 +133,7 @@ class Category extends Base
      */
     public static function find($parameters = array())
     {
-        return parent::find($parameters);
+      return parent::find($parameters);
     }
 
     /**
@@ -141,7 +141,7 @@ class Category extends Base
      */
     public static function findFirst($parameters = array())
     {
-        return parent::findFirst($parameters);
+      return parent::findFirst($parameters);
     }
 
     /**
@@ -149,40 +149,53 @@ class Category extends Base
      */
     public function columnMap()
     {
-        return array(
-            'id' => 'id',
-            'category_is_active' => 'category_is_active',
-            'category_created_at' => 'category_created_at',
-            'category_updated_at' => 'category_updated_at'
-        );
+      return array(
+        'id' => 'id',
+        'category_is_active' => 'category_is_active',
+        'category_created_at' => 'category_created_at',
+        'category_updated_at' => 'category_updated_at'
+      );
     }
 
     public function initialize()
     {
-        $this->hasManyToMany(
-            "id",
-            "App\Core\Models\ArticleCategoryArticle",
-            "category_id",
-            "article_id",
-            "App\Core\Models\Article",
-            "id",
-            array('alias' => 'articles')
-        );
+      $this->hasManyToMany(
+        "id",
+        "App\Core\Models\ArticleCategoryArticle",
+        "category_id",
+        "article_id",
+        "App\Core\Models\Article",
+        "id",
+        array('alias' => 'articles')
+      );
 
-        $this->hasMany('id', 'App\Core\Models\CategoryTranslation', 'category_translation_category_id', array(
-            'alias' => 'translations',
-            'foreignKey' => true
-        ));
+      $this->hasMany('id', 'App\Core\Models\CategoryTranslation', 'category_translation_category_id', array(
+        'alias' => 'translations',
+        'foreignKey' => true
+      ));
 
-        $this->addBehavior(new Timestampable(array(
-            'beforeValidationOnCreate' => array(
-                'field' => 'category_created_at',
-                'format' => 'Y-m-d H:i:s'
-            ),
-            'beforeValidationOnUpdate' => array(
-                'field' => 'category_updated_at',
-                'format' => 'Y-m-d H:i:s'
-            ),
-        )));
+      $this->addBehavior(new Timestampable(array(
+        'beforeValidationOnCreate' => array(
+          'field' => 'category_created_at',
+          'format' => 'Y-m-d H:i:s'
+        ),
+        'beforeValidationOnUpdate' => array(
+          'field' => 'category_updated_at',
+          'format' => 'Y-m-d H:i:s'
+        ),
+      )));
     }
-}
+
+    public function getTranslations($arguments = null) {
+      return $this->getRelated('translations',$arguments);
+    } 
+
+    //Need to overwrite method to include the category translations
+    public function toArray() {
+      //$output = parent::toArray();
+
+      $output['category_translations'] = $this->getTranslations()->toArray();
+
+      return $output;
+    }
+  }

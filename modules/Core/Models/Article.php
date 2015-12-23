@@ -45,9 +45,9 @@ class Article extends Base
      */
     public function setId($id)
     {
-        $this->id = $id;
+      $this->id = $id;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -58,9 +58,9 @@ class Article extends Base
      */
     public function setArticleUserId($article_user_id)
     {
-        $this->article_user_id = $article_user_id;
+      $this->article_user_id = $article_user_id;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -71,9 +71,9 @@ class Article extends Base
      */
     public function setArticleIsPublished($article_is_published)
     {
-        $this->article_is_published = $article_is_published;
+      $this->article_is_published = $article_is_published;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -84,9 +84,9 @@ class Article extends Base
      */
     public function setArticleCreatedAt($article_created_at)
     {
-        $this->article_created_at = $article_created_at;
+      $this->article_created_at = $article_created_at;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -97,9 +97,9 @@ class Article extends Base
      */
     public function setArticleUpdatedAt($article_updated_at)
     {
-        $this->article_updated_at = $article_updated_at;
+      $this->article_updated_at = $article_updated_at;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -109,7 +109,7 @@ class Article extends Base
      */
     public function getId()
     {
-        return $this->id;
+      return $this->id;
     }
 
     /**
@@ -119,7 +119,7 @@ class Article extends Base
      */
     public function getArticleUserId()
     {
-        return $this->article_user_id;
+      return $this->article_user_id;
     }
 
     /**
@@ -129,7 +129,7 @@ class Article extends Base
      */
     public function getArticleIsPublished()
     {
-        return $this->article_is_published;
+      return $this->article_is_published;
     }
 
     /**
@@ -139,7 +139,7 @@ class Article extends Base
      */
     public function getArticleCreatedAt()
     {
-        return $this->article_created_at;
+      return $this->article_created_at;
     }
 
     /**
@@ -149,12 +149,12 @@ class Article extends Base
      */
     public function getArticleUpdatedAt()
     {
-        return $this->article_updated_at;
+      return $this->article_updated_at;
     }
 
     public function getSource()
     {
-        return 'article';
+      return 'article';
     }
 
     /**
@@ -162,7 +162,7 @@ class Article extends Base
      */
     public static function find($parameters = array())
     {
-        return parent::find($parameters);
+      return parent::find($parameters);
     }
 
     /**
@@ -170,7 +170,7 @@ class Article extends Base
      */
     public static function findFirst($parameters = array())
     {
-        return parent::findFirst($parameters);
+      return parent::findFirst($parameters);
     }
 
     /**
@@ -178,34 +178,34 @@ class Article extends Base
      */
     public function columnMap()
     {
-        return array(
-            'id' => 'id',
-            'article_user_id' => 'article_user_id',
-            'article_is_published' => 'article_is_published',
-            'article_created_at' => 'article_created_at',
-            'article_updated_at' => 'article_updated_at'
-        );
+      return array(
+        'id' => 'id',
+        'article_user_id' => 'article_user_id',
+        'article_is_published' => 'article_is_published',
+        'article_created_at' => 'article_created_at',
+        'article_updated_at' => 'article_updated_at'
+      );
     }
 
     public function initialize()
     {
-        
-        
-        $this->hasMany('id', 'App\Core\Models\ArticleTranslation', 'article_translation_article_id', array(
+
+
+      $this->hasMany('id', 'App\Core\Models\ArticleTranslation', 'article_translation_article_id', array(
             'alias' => 'translations',//We can access it like $article->translations
             'foreignKey' => true
-        ));
+          ));
 
-        $this->hasOne('article_user_id', 'App\Core\Models\User', 'id', array(
+          $this->hasOne('article_user_id', 'App\Core\Models\User', 'id', array(
             'alias' => 'user',
             'reusable' => true
-        ));
+          ));
 
         //Many to many relationships require 3 models
         //hasManyToMany(var fields, string! intermediateModel, var intermediateFields, var intermediateReferencedFields,
         //              string! referenceModel, var referencedFields, options = null)
 
-        $this->hasManyToMany(
+          $this->hasManyToMany(
             "id",
             "App\Core\Models\ArticleHashtagArticle",
             "article_id",
@@ -213,11 +213,11 @@ class Article extends Base
             "App\Core\Models\Hashtag",
             "id",
             array(
-                'alias' => 'hashtags'
+              'alias' => 'hashtags'
             )
-        );
+          );
 
-        $this->hasManyToMany(
+          $this->hasManyToMany(
             "id",
             "App\Core\Models\ArticleCategoryArticle",
             "article_id",
@@ -225,19 +225,63 @@ class Article extends Base
             "App\Core\Models\Category",
             "id",
             array(
-                'alias' => 'categories'
+              'alias' => 'categories'
             )
-        );
+          );
 
-        $this->addBehavior(new Timestampable(array(
+          $this->addBehavior(new Timestampable(array(
             'beforeValidationOnCreate' => array(
-                'field' => 'article_created_at',
-                'format' => 'Y-m-d H:i:s'
+              'field' => 'article_created_at',
+              'format' => 'Y-m-d H:i:s'
             ),
             'beforeValidationOnUpdate' => array(
-                'field' => 'article_updated_at',
-                'format' => 'Y-m-d H:i:s'
+              'field' => 'article_updated_at',
+              'format' => 'Y-m-d H:i:s'
             ),
-        )));
-    }
-}
+          )));
+        }
+
+        public function getTranslations($arguments = null) {
+          return $this->getRelated('translations', $arguments);
+        }
+
+        public function getCategories($arguments = null) {
+          return $this->getRelated('categories', $arguments);
+        }
+
+        public function getHashtags($arguments = null) {
+          return $this->getRelated('hashtags', $arguments);
+        }
+
+        public function getUser($arguments = null) {
+          return $this->getRelated('user', $arguments);
+        }
+
+        //Overwrite toArray() method to include all related information for an article (translation, author, categories, hashtags)
+        public function toArray($columns = null) {
+          $output = parent::toArray($columns);//Add the columns from 'article' table to the output
+
+          $output['article_translations'] = $this->getTranslations()->toArray();//We can pass ['columns'=>[...]] to specify which columns to include
+
+          $output['article_categories'] = $this->getCategories()->filter(function($category) {//Pass each category through a filter and call it's toArray() function
+            return $category->toArray();
+          });
+
+          $output['article_author'] = $this->getUser(array(
+            'columns' => array(
+              'user_first_name',
+              'user_last_name',
+              'user_email',
+            )
+          ))->toArray();
+
+          $output['article_hashtags'] = $this->getHashtags()->filter(function($hashtag){
+            return $hashtag->toArray();
+          });
+
+
+          return $output;
+        }
+
+
+  }

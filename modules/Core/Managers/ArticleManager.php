@@ -65,5 +65,27 @@ class ArticleManager extends BaseManager {
 		}
 		return true;
 	}
+
+	public function restGet(array $parameters = null, array $options = null, $page = 1, $limit = 10) {
+
+		$articles = $this->find($parameters);//Returns all articles by default
+
+		//Apply the toArray() method to each article to get all related information
+		$result = $articles->filter(function($article){
+			return $article->toArray();
+		});
+
+		$paginator = new \Phalcon\Paginator\Adapter\NativeArray([
+			'data' => $result,
+			'limit' => $limit,
+			'page' => $page
+		]);
+
+		$data = $paginator->getPaginate();
+
+		if($data->total_items > 0)
+			return $data;
+
+	}
 	
 }
