@@ -4,6 +4,53 @@ namespace App\Api\Controllers;
 
 class ArticlesController extends BaseController {
 
+	/**
+     * @ApiDescription(section="Articles", description="Retrieve a list of articles")
+     * @ApiMethod(type="get")
+     * @ApiRoute(name="/articles")
+     * @ApiParams(name="p", type="integer", nullable=true, description="Page number")
+     * @ApiReturnHeaders(sample="HTTP 200 OK")
+     * @ApiReturn(type="object", sample="{
+     *  'items': [{
+     *      'id':'int',
+     *      'article_user_id':'int',
+     *      'article_is_published':'int',
+     *      'article_created_at':'string',
+     *      'article_updated_at':'string',
+     *      'article_translations':[{
+     *          'article_translation_short_title':'string',
+     *          'article_translation_long_title':'string',
+     *          'article_translation_slug':'string',
+     *          'article_translation_description':'string',
+     *          'article_translation_lang':'string'
+     *      }],
+     *      'article_categories':[{
+     *          'id':'int',
+     *          'category_translations':[{
+     *              'category_translation_name':'string',
+     *              'category_translation_slug':'string',
+     *              'category_translation_lang':'string'
+     *          }]
+     *      }],
+     *      'article_hashtags':[{
+     *          'id':'int',
+     *          'hashtag_name':'string'
+     *      }],
+     *      'article_author':{
+     *          'user_first_name':'string',
+     *          'user_last_name':'string',
+     *          'user_email':'string'
+     *      }
+     *  }],
+     *  'before':'int',
+     *  'first':'int',
+     *  'next':'int',
+     *  'last':'int',
+     *  'current':'int',
+     *  'total_pages':'int',
+     *  'total_items':'int',
+     * }")
+     */
 	public function listAction() {
 
 		try {
