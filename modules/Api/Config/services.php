@@ -3,6 +3,14 @@
 $di['dispatcher'] = function() use ($di) {
 	$eventsManager = $di->getShared('eventsManager');
 
+  /*
+  Phalcon\Mvc\Dispatcher is able to send events to an EventsManager if it is present. 
+  Events are triggered using the type “dispatch”. 
+  Some events when returning boolean false could stop the active operation.
+   */
+  $apiListener = new \App\Core\Listeners\ApiListener();
+  $eventsManager->attach('dispatch', $apiListener);//Listen to all dispatch events
+
   $dispatcher = new \Phalcon\Mvc\Dispatcher();
   $dispatcher->setEventsManager($eventsManager);
   $dispatcher->setDefaultNamespace('App\Api\Controllers');

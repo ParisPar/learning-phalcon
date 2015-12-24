@@ -25,5 +25,8 @@ return new \Phalcon\Config(array(
 		'username' => 'phalcon_user',
 		'password' => 'password',
 		'dbname' => 'learning_phalcon'
+	),
+	'apiKeys' => array(
+		'serjg89s85g90s85g9w8409g8s09g8sr09g8se09g8e90g859e0g8sseg98j'
 	)
 ));
