@@ -13,6 +13,10 @@ class ApiListener extends \Phalcon\Mvc\User\Plugin {
 		if($hasValidKey == false || $ipRateLimit == false) {
 			return false;
 		}
+
+		if($this->resourceWithToken() == false) {
+			return false;
+		}
 	}
 
 	private function checkForValidApiKey() {
@@ -58,6 +62,20 @@ class ApiListener extends \Phalcon\Mvc\User\Plugin {
 		}
 
 		return true;
+	}
+
+	private function resourceWithToken() {
+		if(in_array($this->dispatcher->getActionName(), ['update','delete','create'])) {
+			if($this->request->getHeader('TOKEN') != 'mySecretToken') {
+				$this->response->setStatusCode(405, 'Method Not Allowed');
+				$this->response->sendHeaders();
+				$this->response->send();
+				$this->view->disable();
+
+				return false;
+			}
+			return true;
+		}
 	}
 
 
