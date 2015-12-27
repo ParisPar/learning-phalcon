@@ -23,3 +23,7 @@ $di['view'] = function () {
 
   return $view;
 };
+
+$di['auth'] = function() {
+  return new App\Core\Security\Auth();
+}

@@ -12,7 +12,13 @@ $module_config = new \Phalcon\Config(array(
 		'baseUri' => '/learning-phalcon/backoffice/',
 		'cryptSalt' => 'aoj90g89d5jgd95g8',
 		'publicUrl' => 'http://test.com/learning-phalcon/'
-	)
+	),
+	'auth' => array(
+		'redirect' => array(
+			'success' => 'index/index',
+			'failure' => 'auth/signin',
+		),
+	),
 ));
 
 $config->merge($module_config);
