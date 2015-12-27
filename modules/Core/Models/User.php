@@ -71,9 +71,9 @@ class User extends Base
      */
     public function setId($id)
     {
-        $this->id = $id;
+      $this->id = $id;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -84,9 +84,9 @@ class User extends Base
      */
     public function setUserFirstName($user_first_name)
     {
-        $this->user_first_name = $user_first_name;
+      $this->user_first_name = $user_first_name;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -97,9 +97,9 @@ class User extends Base
      */
     public function setUserLastName($user_last_name)
     {
-        $this->user_last_name = $user_last_name;
+      $this->user_last_name = $user_last_name;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -110,9 +110,9 @@ class User extends Base
      */
     public function setUserEmail($user_email)
     {
-        $this->user_email = $user_email;
+      $this->user_email = $user_email;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -123,9 +123,9 @@ class User extends Base
      */
     public function setUserPassword($user_password)
     {
-        $this->user_password = $user_password;
+      $this->user_password = $user_password;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -136,9 +136,9 @@ class User extends Base
      */
     public function setUserGroupId($user_group_id)
     {
-        $this->user_group_id = $user_group_id;
+      $this->user_group_id = $user_group_id;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -149,9 +149,9 @@ class User extends Base
      */
     public function setUserIsActive($user_is_active)
     {
-        $this->user_is_active = $user_is_active;
+      $this->user_is_active = $user_is_active;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -162,9 +162,9 @@ class User extends Base
      */
     public function setUserCreatedAt($user_created_at)
     {
-        $this->user_created_at = $user_created_at;
+      $this->user_created_at = $user_created_at;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -175,9 +175,9 @@ class User extends Base
      */
     public function setUserUpdatedAt($user_updated_at)
     {
-        $this->user_updated_at = $user_updated_at;
+      $this->user_updated_at = $user_updated_at;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -187,7 +187,7 @@ class User extends Base
      */
     public function getId()
     {
-        return $this->id;
+      return $this->id;
     }
 
     /**
@@ -197,7 +197,7 @@ class User extends Base
      */
     public function getUserFirstName()
     {
-        return $this->user_first_name;
+      return $this->user_first_name;
     }
 
     /**
@@ -207,7 +207,7 @@ class User extends Base
      */
     public function getUserLastName()
     {
-        return $this->user_last_name;
+      return $this->user_last_name;
     }
 
     /**
@@ -217,7 +217,7 @@ class User extends Base
      */
     public function getUserEmail()
     {
-        return $this->user_email;
+      return $this->user_email;
     }
 
     /**
@@ -227,7 +227,7 @@ class User extends Base
      */
     public function getUserPassword()
     {
-        return $this->user_password;
+      return $this->user_password;
     }
 
     /**
@@ -237,7 +237,7 @@ class User extends Base
      */
     public function getUserGroupId()
     {
-        return $this->user_group_id;
+      return $this->user_group_id;
     }
 
     /**
@@ -247,7 +247,7 @@ class User extends Base
      */
     public function getUserIsActive()
     {
-        return $this->user_is_active;
+      return $this->user_is_active;
     }
 
     /**
@@ -257,7 +257,7 @@ class User extends Base
      */
     public function getUserCreatedAt()
     {
-        return $this->user_created_at;
+      return $this->user_created_at;
     }
 
     /**
@@ -267,12 +267,12 @@ class User extends Base
      */
     public function getUserUpdatedAt()
     {
-        return $this->user_updated_at;
+      return $this->user_updated_at;
     }
 
     public function getSource()
     {
-        return 'user';
+      return 'user';
     }
 
     /**
@@ -280,7 +280,7 @@ class User extends Base
      */
     public static function find($parameters = array())
     {
-        return parent::find($parameters);
+      return parent::find($parameters);
     }
 
     /**
@@ -288,7 +288,7 @@ class User extends Base
      */
     public static function findFirst($parameters = array())
     {
-        return parent::findFirst($parameters);
+      return parent::findFirst($parameters);
     }
 
     /**
@@ -296,57 +296,78 @@ class User extends Base
      */
     public function columnMap()
     {
-        return array(
-            'id' => 'id',
-            'user_first_name' => 'user_first_name',
-            'user_last_name' => 'user_last_name',
-            'user_email' => 'user_email',
-            'user_password' => 'user_password',
-            'user_group_id' => 'user_group_id',
-            'user_is_active' => 'user_is_active',
-            'user_created_at' => 'user_created_at',
-            'user_updated_at' => 'user_updated_at'
-        );
+      return array(
+        'id' => 'id',
+        'user_first_name' => 'user_first_name',
+        'user_last_name' => 'user_last_name',
+        'user_email' => 'user_email',
+        'user_password' => 'user_password',
+        'user_group_id' => 'user_group_id',
+        'user_is_active' => 'user_is_active',
+        'user_created_at' => 'user_created_at',
+        'user_updated_at' => 'user_updated_at'
+      );
     }
 
     public function initialize()
     {
-        $this->hasOne('id', 'App\Core\Models\UserProfile', 'user_profile_user_id', array(
+      $this->hasOne('id', 'App\Core\Models\UserProfile', 'user_profile_user_id', array(
             'alias' => 'profile',//We can access the profile like this: $user->profile
             'reusable' => true
-        ));
+          ));
 
-        $this->hasOne('user_group_id', 'App\Core\Models\UserGroups', 'id', array(
+          $this->hasOne('user_group_id', 'App\Core\Models\UserGroups', 'id', array(
             'alias' => 'group',
             'reusable' => true
-        ));
+          ));
+
+          $this->hasMany('id','App\Core\Models\UserFailedLogins','user_id', array(
+            'alias' => 'failedLogins',
+            'foreignKey' => array(
+              'action' => \Phalcon\Mvc\Model\Relation::ACTION_CASCADE
+            )
+          ));
+
+          $this->hasMany('id','App\Core\Models\UserSuccessLogins','user_id', array(
+            'alias' => 'successLogins',
+            'foreignKey' => array(
+              'action' => \Phalcon\Mvc\Model\Relation::ACTION_CASCADE
+            )
+          ));
+
+          $this->hasMany('id','App\Core\Models\UserRememberTokens','user_id', array(
+            'alias' => 'rememberTokens',
+            'foreignKey' => array(
+              'action' => \Phalcon\Mvc\Model\Relation::ACTION_CASCADE
+            )
+          ));
 
         //Set the model to automatically fill the created_at and updated_at fields
-        $this->addBehavior(new Timestampable(array(
+          $this->addBehavior(new Timestampable(array(
             'beforeValidationOnCreate' => array(
-                'field' => 'user_created_at',
-                'format' => 'Y-m-d H:i:s'
+              'field' => 'user_created_at',
+              'format' => 'Y-m-d H:i:s'
             ),
             'beforeValidationOnUpdate' => array(
-                'field' => 'user_updated_at',
-                'format' => 'Y-m-d H:i:s'
+              'field' => 'user_updated_at',
+              'format' => 'Y-m-d H:i:s'
             ),
-        )));
-    }
+          )));
+        }
 
-    public function validation()
-    {
-        $this->validate(new Email(array(
+        public function validation()
+        {
+          $this->validate(new Email(array(
             "field" => "user_email",
             "message" => "Invalid email address"
-        )));
+          )));
 
-        $this->validate(new Uniqueness(array(
+          $this->validate(new Uniqueness(array(
             "field" => "user_email",
             "message" => "The email is already registered"
-        )));
+          )));
 
-        return $this->validationHasFailed() != true;
-    }
+          return $this->validationHasFailed() != true;
+        }
 
-}
+      }
