@@ -24,7 +24,7 @@ class UserTask extends BaseTask {
 				'user_is_active' => $params[4],
 				'user_profile_location' => $params[5],
 				'user_profile_birthday' => $params[6],
-			));
+			), 'Guest');
 
 			$this->consoleLog(sprintf(
 				"User %s %s has been created. ID: %d",

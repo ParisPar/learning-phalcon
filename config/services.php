@@ -121,3 +121,19 @@ $di['core_user_manager'] = function() {
 $di['core_category_manager'] = function() {
 	return new App\Core\Managers\CategoryManager();
 };
+
+$di['acl'] = function() use ($di) {
+	$acl = new \Phalcon\Acl\Adapter\Database([
+		'db' => $di['db'],
+		'roles' => 'acl_roles',
+		'rolesInherits' => 'acl_roles_inherits',
+		'resources' => 'acl_resources',
+		'resourcesAccesses' => 'acl_resources_accesses',
+		'accessList' => 'acl_access_list'
+	]);
+
+	$acl->setDefaultAction(\Phalcon\Acl::DENY);
+
+	return $acl;
+};
+

@@ -3,6 +3,8 @@
 $di['dispatcher'] = function() use ($di) {
 	$eventsManager = $di->getShared('eventsManager');
 
+  $eventsManager->attach('dispatch', new App\Core\Security\Acl($di));
+
   $dispatcher = new \Phalcon\Mvc\Dispatcher();
   $dispatcher->setEventsManager($eventsManager);
   $dispatcher->setDefaultNamespace('App\Backoffice\Controllers');

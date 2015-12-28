@@ -316,11 +316,6 @@ class User extends Base
             'reusable' => true
           ));
 
-          $this->hasOne('user_group_id', 'App\Core\Models\UserGroups', 'id', array(
-            'alias' => 'group',
-            'reusable' => true
-          ));
-
           $this->hasMany('id','App\Core\Models\UserFailedLogins','user_id', array(
             'alias' => 'failedLogins',
             'foreignKey' => array(

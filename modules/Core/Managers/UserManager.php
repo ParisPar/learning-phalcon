@@ -12,7 +12,7 @@ class UserManager extends BaseManager {
 		return User::find($parameters);
 	}
 
-	public function create($data, $user_group_name = 'User') {
+	public function create($data, $user_group_name = 'Guest') {
 		$security = $this->getDI()->get('security');
 
 		$user = new User();
@@ -22,8 +22,15 @@ class UserManager extends BaseManager {
 		$user->setUserPassword($security->hash($data['user_password']));
 		$user->setUserIsActive($data['user_is_active']);
 
-		$user_group_id = $this->findFirstGroupByName($user_group_name)->getId();
-		$user->setUserGroupId($user_group_id);
+		$o_acl_role = new AclRoles::findFirstByName($user_role);
+
+		if(!$o_acl_role)
+			throw new \Exception("Role $user_role does not exist");
+
+		$o_user_role[0] = new UserRole();
+		$o_user_role[0]->setUserRole($user_role);
+
+		$user->roles = $o_user_role;
 
 		$profile = new UserProfile();
 		$profile->setUserProfileLocation($data['user_profile_location']);

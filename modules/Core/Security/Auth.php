@@ -42,16 +42,19 @@ class Auth extends \Phalcon\Mvc\User\Component {//Extending \Phalcon\Mvc\User\Co
 	 * @param App\Core\Model\User $user
 	 */
 	private function setIdentity($user) {
-		$st_identity = [
-		'id' => $user->getId(),
-		'email' => $user->getUserEmail(),
-		'name' => $user->getUserFirstName() . ' ' . $user->getUserLastName(),
-		'roles' => [
-		  'Administrator'
-		]
-		];
-		$this->session->set('identity', $st_identity);
-	}
+    $roles = [];
+    foreach($user->roles as $role){
+      $roles[] = $role->getUserRole();
+    }
+
+    $st_identity = [
+    'id' => $user->getId(),
+    'email' => $user->getUserEmail(),
+    'name' => $user->getUserFirstName() . ' ' . $user->getUserLastName(),
+    'roles' =>  $roles
+    ];
+    $this->session->set('identity', $st_identity);
+  }
 
 	/**
 	 * Login user - without remember me
@@ -142,9 +145,9 @@ class Auth extends \Phalcon\Mvc\User\Component {//Extending \Phalcon\Mvc\User\Co
      *
      * @param App\Core\Models\User $user
      */
-  public function createRememberEnviroment($user) {
+  public function createRememberEnvironment($user) {
     $user_agent = $this->request->getUserAgent();
-    $token = md5($user->getEmail().$user->getPassword().$user_agent);
+    $token = md5($user->getUserEmail().$user->getUserPassword().$user_agent);
 
     $remember = new UserRememberTokens();
     $remember->setUserId($user->getId());
@@ -326,11 +329,11 @@ class Auth extends \Phalcon\Mvc\User\Component {//Extending \Phalcon\Mvc\User\Co
      * @param  integer $length
      * @return string
      */
-    public function generatePassword($length = 8)
-    {
-        $chars = "abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ123456789#@%_.";
+  public function generatePassword($length = 8)
+  {
+    $chars = "abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ123456789#@%_.";
 
-        return substr(str_shuffle($chars), 0, $length);
-    }
+    return substr(str_shuffle($chars), 0, $length);
+  }
 
 }
