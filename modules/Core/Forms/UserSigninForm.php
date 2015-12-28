@@ -8,7 +8,7 @@ use Phalcon\Forms\Element\Password;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Check;
 use Phalcon\Forms\Element\Hidden;
-use Phalcon\Validation\Validator\PresenseOf;
+use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\Email;
 use Phalcon\Validation\Validator\Identical;
 
@@ -49,17 +49,17 @@ class UserSigninForm extends Form {
 
 		$remember->setLabel('Remember me');
 
-		$this->add($remeber);
+		$this->add($remember);
 
 		//Cross-Site Request Forgery
-		$crsf = new Hidden('crsf');
+		$csrf = new Hidden('csrf');
 
-		$crsf->addValidator(new Identical(array(
+		$csrf->addValidator(new Identical(array(
 			'value' => $this->security->getSessionToken(),
-			'message' => 'CRSF validation failed'
+			'message' => 'CsrF validation failed'
 		)));
 
-		$this->add($crsf);
+		$this->add($csrf);
 
 		$this->add(new Submit('signin',array(
 			'class' => 'btn btn-lg btn-primary btn-block'

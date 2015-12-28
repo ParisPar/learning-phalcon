@@ -47,9 +47,9 @@ class Auth extends \Phalcon\Mvc\User\Component {//Extending \Phalcon\Mvc\User\Co
 		'email' => $user->getUserEmail(),
 		'name' => $user->getUserFirstName() . ' ' . $user->getUserLastName(),
 		'roles' => [
-		'Administrator'
+		  'Administrator'
 		]
-		]
+		];
 		$this->session->set('identity', $st_identity);
 	}
 
@@ -95,7 +95,7 @@ class Auth extends \Phalcon\Mvc\User\Component {//Extending \Phalcon\Mvc\User\Co
 		$successLogin->setIpAddress($this->request->getClientAddress());
 		$successLogin->setUserAgent($this->request->getUserAgent());
 
-		if($successLogin->save()) {
+		if(!$successLogin->save()) {
 			$messages = $successLogin->getMessages();
 			throw new \Exception($messages[0]);
 		}
@@ -110,7 +110,7 @@ class Auth extends \Phalcon\Mvc\User\Component {//Extending \Phalcon\Mvc\User\Co
    */
   public function registerUserThrottling($user_id) {
     $failedLogin = new UserFailedLogins();
-    $failedLogin->setUserId($user_id == null ? new \Phalcon\Db\Raw\Value('NULL') : $user_id);
+    $failedLogin->setUserId($user_id == null ? new \Phalcon\Db\RawValue('NULL') : $user_id);
     $failedLogin->setIpAddress($this->request->getClientAddress());
     $failedLogin->setAttempted(time());
     $failedLogin->save();
@@ -121,7 +121,7 @@ class Auth extends \Phalcon\Mvc\User\Component {//Extending \Phalcon\Mvc\User\Co
     $this->request->getClientAddress(),
     time() - 3600 * 6
     ]
-    ])
+    ]);
 
     switch ($attempts) {
      case 1:

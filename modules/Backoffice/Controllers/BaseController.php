@@ -29,5 +29,13 @@ class BaseController extends \Phalcon\Mvc\Controller {
 			->setTargetUri('../assets/default/prod/backoffice.js')//Sets a target uri for the generated HTML
 			->join(true)//Sets if all filtered resources in the collection must be joined in a single result file
 			->addFilter(new \Phalcon\Assets\Filters\Jsmin());
+
+		$this->assets
+			->collection('signin')
+			->addCss($assets_dir . 'default/css/lp.backoffice.signin.css')
+			->setTargetPath('assets/default/prod/backoffice.signin.css')//Sets the target path of the file for the filtered/join output
+			->setTargetUri('../assets/default/prod/backoffice.signin.css')//Sets a target uri for the generated HTML
+			->addFilter(new \Phalcon\Assets\Filters\Cssmin());//Adds a filter to the collection. Cssmin minifies the css - removes comments removes newlines and line feeds keeping removes last semicolon from last property
+
 	}
 }

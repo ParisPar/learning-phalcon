@@ -26,4 +26,4 @@ $di['view'] = function () {
 
 $di['auth'] = function() {
   return new App\Core\Security\Auth();
-}
+};
