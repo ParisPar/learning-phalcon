@@ -6,6 +6,8 @@ class UserTask extends BaseTask {
 		$this->consoleLog('OK');
 	}
 
+	//Example usage: php modules/cli.php user create admin2 admin2 admin2@fake.com password 1 Barcelona 1985-03-25 Administrator
+
 	public function createAction($params = null) {
 		if(!is_array($params) || count($params) < 5) {
 			$this->quit('Usage: php modules/cli.php user create fname lname email password isactive');
@@ -24,7 +26,7 @@ class UserTask extends BaseTask {
 				'user_is_active' => $params[4],
 				'user_profile_location' => $params[5],
 				'user_profile_birthday' => $params[6],
-			), 'Guest');
+			), $params[]);
 
 			$this->consoleLog(sprintf(
 				"User %s %s has been created. ID: %d",

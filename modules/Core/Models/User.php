@@ -337,6 +337,13 @@ class User extends Base
             )
           ));
 
+          $this->hasMany('id', 'App\Core\Models\UserRole', 'user_id', array(
+            'alias' => 'roles',
+            'foreignKey' => array(
+                'action' => \Phalcon\Mvc\Model\Relation::ACTION_CASCADE,
+            ),
+        ));
+
         //Set the model to automatically fill the created_at and updated_at fields
           $this->addBehavior(new Timestampable(array(
             'beforeValidationOnCreate' => array(
