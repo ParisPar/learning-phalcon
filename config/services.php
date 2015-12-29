@@ -122,6 +122,10 @@ $di['core_category_manager'] = function() {
 	return new App\Core\Managers\CategoryManager();
 };
 
+$di['core_hashtag_manager'] = function() {
+	return new App\Core\Managers\HashtagManager();
+};
+
 $di['acl'] = function() use ($di) {
 
 	//This namespace is defined inside Phalcon incubator

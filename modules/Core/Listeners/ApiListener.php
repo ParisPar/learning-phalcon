@@ -74,8 +74,8 @@ class ApiListener extends \Phalcon\Mvc\User\Plugin {
 
 				return false;
 			}
-			return true;
 		}
+		return true;
 	}
 
 

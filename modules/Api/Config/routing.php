@@ -17,36 +17,54 @@ $articles = new \Phalcon\Mvc\Router\Group(array(
 $articles->setPrefix($versions['v1'].'/articles');
 
 $articles->addGet('',array(
-	'module' => 'api',
-	'controller' => 'articles',
 	'action'  => 'list'
 ));
 
 $articles->addGet('/{id}',array(
-	'module' => 'api',
-	'controller' => 'articles',
 	'action'  => 'get'
 ));
 
 $articles->addPut('/{id}',array(
-	'module' => 'api',
-	'controller' => 'articles',
 	'action'  => 'update'
 ));
 
 $articles->addDelete('/{id}',array(
-	'module' => 'api',
-	'controller' => 'articles',
 	'action'  => 'delete'
 ));
 
 $articles->addPost('',array(
-	'module' => 'api',
-	'controller' => 'articles',
 	'action'  => 'create'
+));
+
+$hashtags = new \Phalcon\Mvc\Router\Group(array(
+	'module' => 'api',
+	'controller' => 'hashtags'
+));
+
+$hashtags->setPrefix($versions['v1'].'/hashtags');
+
+$hashtags->addGet('',array(
+	'action' => 'list'
+));
+
+$hashtags->addGet('/{id}',array(
+	'action' => 'get'
+));
+
+$hashtags->addPut('/{id}',array(
+	'action' => 'update'
+));
+
+$hashtags->addDelete('/{id}',array(
+	'action' => 'delete'
+));
+
+$hashtags->addPost('',array(
+	'action' => 'create'
 ));
 
 
 
 // Add the group to the router
 $router->mount($articles);
+$router->mount($hashtags);

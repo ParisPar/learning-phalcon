@@ -1,32 +1,130 @@
 <?php
-
 namespace App\Core\Managers;
 
-class BaseManager extends \Phalcon\Mvc\User\Module {
+class BaseManager extends \Phalcon\Mvc\User\Module
+{
+    /**
+     * Get records from DB - REST ready
+     * @param array $parameters
+     * @param array $options
+     */
+    public function restGet(array $parameters = null, array $options = null, $page = 1, $limit = 10)
+    {
+        //This method calls the apropriate find method, according to the subclass that the restGet() call originated from.
+        //For example if restGet() was called from a HashtahManager object then the HashtagManager::find() method is called.
+        $objects = $this->find($parameters);
 
-	public function save($object, $type = 'save') {
+        if (is_array($objects)) {
+            $result = $objects;
+        } else {
+            //Apply the toArray() method to each object(article/category/hashtag/user) to get all related information
+            $result = $objects->filter(function ($object) {
+                return $object->toArray();
+            });
+        }
 
-		switch($type) {
-			case 'save':
-				$result = $object->save();
-				break;
-			case 'create':
-				$result = $object->create();
-				break;
-			case 'update':
-				$result = $object->update();
-				break;
-		}
+        $paginator = new \Phalcon\Paginator\Adapter\NativeArray([
+            'data'  => $result,
+            'limit' => $limit,
+            'page'  => $page,
+        ]);
 
-		if($result === false) {
-			foreach ($object->getMessages() as $message) {
-				$error[] = (string) $message;
-			}
+        $data = $paginator->getPaginate();
 
-			throw new \Exception(json_encode($error));
-		}
+        if ($data->total_items > 0) {
+            return $data;
+        }
 
-		return $object;
-	}
-	
+        //If the query contains an id but no result with that id was found
+        if (isset($parameters['bind']['id'])) {
+            throw new \Exception('Not found', 404);
+        } else {
+            throw new \Exception('No Content', 204);
+        }
+    }
+
+    /**
+     * Delete an object with rest
+     * @param  number     $id
+     * @throws \Exception
+     * @return boolean
+     */
+    public function restDelete($id)
+    {
+        $object = $this->findFirstById($id);
+
+        if (!$object) {
+            throw new \Exception('Object not found', 404);
+        }
+
+        if (false === $object->delete()) {
+            foreach ($object->getMessages() as $message) {
+                $error[] = (string) $message;
+            }
+
+            throw new \Exception(json_encode($error));
+        }
+
+        return true;
+    }
+
+    /**
+     * Create a new object
+     * @param array $data
+     */
+    public function restCreate($data)
+    {
+        $result = $this->create($data);
+
+        if (is_object($result)) {
+            return $result->toArray();
+        }
+    }
+
+    /**
+     * Update an existing object
+     * @param array $data
+     */
+    public function restUpdate($data)
+    {
+        $result = $this->update($data);
+
+        if (is_object($result)) {
+            return $result->toArray();
+        }
+    }
+
+    /**
+     * Save/Create/Update an object
+     *
+     * @param  \Phalcon\Mvc\Model $object
+     * @param  string             $type
+     * @throws \Exception
+     * @return Object
+     */
+    public function save($object, $type = 'save')
+    {
+        switch ($type) {
+            case 'save':
+                $result = $object->save();
+                break;
+            case 'create':
+                $result = $object->create();
+                break;
+            case 'update':
+                $result = $object->update();
+                break;
+        }
+
+        if (false === $result) {
+            foreach ($object->getMessages() as $message) {
+                $error[] = (string) $message;
+            }
+            $output = (count($error) > 1) ? json_encode($error) : $error[0];
+
+            throw new \Exception($output);
+        }
+
+        return $object;
+    }
 }
