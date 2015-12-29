@@ -123,6 +123,8 @@ $di['core_category_manager'] = function() {
 };
 
 $di['acl'] = function() use ($di) {
+
+	//This namespace is defined inside Phalcon incubator
 	$acl = new \Phalcon\Acl\Adapter\Database([
 		'db' => $di['db'],
 		'roles' => 'acl_roles',

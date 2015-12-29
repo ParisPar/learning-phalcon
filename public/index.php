@@ -9,7 +9,7 @@ mb_internal_encoding('UTF-8');
 
 require_once __DIR__.'/../modules/Bootstrap.php';
 
-//Add Composer autoloader
+//Add Composer autoloader. This loads Phalcon incubator
 require_once __DIR__.'/../vendor/autoload.php';
 
 $app = new Bootstrap('frontend');
