@@ -6,7 +6,7 @@ use \Phalcon\Http\Response;
 
 
 
-class BaseController extends \Phalcon\Mvc\Controller {
+class BaseController extends \App\Core\Controllers\BaseController {
 
 	protected $statusCode = 200;
 

@@ -7,10 +7,6 @@ class Bootstrap extends \Phalcon\Mvc\Application {
 	public function __construct($default_module){
 
 		$this->modules = array(
-			'core' => array(
-				'className' => 'App\Core\Module',
-				'path'			=> __DIR__.'/Core/Module.php'
-			),
 			'api' => array(
 				'className' => 'App\Api\Module',
 				'path'			=> __DIR__.'/Api/Module.php'

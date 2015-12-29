@@ -2,7 +2,7 @@
 
 namespace App\Backoffice\Controllers;
 
-class BaseController extends \Phalcon\Mvc\Controller {
+class BaseController extends \App\Core\Controllers\BaseController {
 
 	public function afterExecuteRoute() {
 		$this->buildAssets();
