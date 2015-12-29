@@ -7,7 +7,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>{% block pageTitle %}Backoffice - Learning Phalcon{% endblock %}</title>
 	
-	{{ assets.outputCss('headerCss')}}
+	{{ stylesheetLink('../assets/default/bower_components/bootstrap/dist/css/bootstrap.min.css') }}
+	{{ assets.outputCss('headerCss') }}
 	{% block css %}{% endblock %}
 
 </head>

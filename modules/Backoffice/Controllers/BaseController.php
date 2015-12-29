@@ -13,7 +13,6 @@ class BaseController extends \App\Core\Controllers\BaseController {
 
 		$this->assets
 			->collection('headerCss')
-			->addCss($assets_dir . 'default/bower_components/bootstrap/dist/css/bootstrap.min.css')
 			->addCss($assets_dir . 'default/css/lp.backoffice.css')
 			->setTargetPath('assets/default/prod/backoffice.css')//Sets the target path of the file for the filtered/join output
 			->setTargetUri('../assets/default/prod/backoffice.css')//Sets a target uri for the generated HTML
