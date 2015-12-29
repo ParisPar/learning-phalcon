@@ -3,6 +3,7 @@
 namespace App\Core\Models;
 
 use \Phalcon\Mvc\Model\Behavior\Timestampable;
+use \Phalcon\Mvc\Model\Validator\Uniqueness;
 
 class Hashtag extends \Phalcon\Mvc\Model
 {
@@ -39,9 +40,9 @@ class Hashtag extends \Phalcon\Mvc\Model
      */
     public function setId($id)
     {
-        $this->id = $id;
+      $this->id = $id;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -52,9 +53,9 @@ class Hashtag extends \Phalcon\Mvc\Model
      */
     public function setHashtagName($hashtag_name)
     {
-        $this->hashtag_name = $hashtag_name;
+      $this->hashtag_name = $hashtag_name;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -65,9 +66,9 @@ class Hashtag extends \Phalcon\Mvc\Model
      */
     public function setHashtagCreatedAt($hashtag_created_at)
     {
-        $this->hashtag_created_at = $hashtag_created_at;
+      $this->hashtag_created_at = $hashtag_created_at;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -78,9 +79,9 @@ class Hashtag extends \Phalcon\Mvc\Model
      */
     public function setHashtagUpdatedAt($hashtag_updated_at)
     {
-        $this->hashtag_updated_at = $hashtag_updated_at;
+      $this->hashtag_updated_at = $hashtag_updated_at;
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -90,7 +91,7 @@ class Hashtag extends \Phalcon\Mvc\Model
      */
     public function getId()
     {
-        return $this->id;
+      return $this->id;
     }
 
     /**
@@ -100,7 +101,7 @@ class Hashtag extends \Phalcon\Mvc\Model
      */
     public function getHashtagName()
     {
-        return $this->hashtag_name;
+      return $this->hashtag_name;
     }
 
     /**
@@ -110,7 +111,7 @@ class Hashtag extends \Phalcon\Mvc\Model
      */
     public function getHashtagCreatedAt()
     {
-        return $this->hashtag_created_at;
+      return $this->hashtag_created_at;
     }
 
     /**
@@ -120,12 +121,12 @@ class Hashtag extends \Phalcon\Mvc\Model
      */
     public function getHashtagUpdatedAt()
     {
-        return $this->hashtag_updated_at;
+      return $this->hashtag_updated_at;
     }
 
     public function getSource()
     {
-        return 'hashtag';
+      return 'hashtag';
     }
 
     /**
@@ -133,7 +134,7 @@ class Hashtag extends \Phalcon\Mvc\Model
      */
     public static function find($parameters = array())
     {
-        return parent::find($parameters);
+      return parent::find($parameters);
     }
 
     /**
@@ -141,7 +142,7 @@ class Hashtag extends \Phalcon\Mvc\Model
      */
     public static function findFirst($parameters = array())
     {
-        return parent::findFirst($parameters);
+      return parent::findFirst($parameters);
     }
 
     /**
@@ -149,35 +150,44 @@ class Hashtag extends \Phalcon\Mvc\Model
      */
     public function columnMap()
     {
-        return array(
-            'id' => 'id',
-            'hashtag_name' => 'hashtag_name',
-            'hashtag_created_at' => 'hashtag_created_at',
-            'hashtag_updated_at' => 'hashtag_updated_at'
-        );
+      return array(
+        'id' => 'id',
+        'hashtag_name' => 'hashtag_name',
+        'hashtag_created_at' => 'hashtag_created_at',
+        'hashtag_updated_at' => 'hashtag_updated_at'
+      );
     }
     public function initialize()
     {
-        $this->hasManyToMany(
-            "id",
-            "App\Core\Models\ArticleHashtagArticle",
-            "hashtag_id",
-            "article_id",
-            "App\Core\Models\Article",
-            "id",
-            array('alias' => 'articles')
-        );
+      $this->hasManyToMany(
+        "id",
+        "App\Core\Models\ArticleHashtagArticle",
+        "hashtag_id",
+        "article_id",
+        "App\Core\Models\Article",
+        "id",
+        array('alias' => 'articles')
+      );
 
-        $this->addBehavior(new Timestampable(array(
-            'beforeValidationOnCreate' => array(
-                'field' => 'hashtag_created_at',
-                'format' => 'Y-m-d H:i:s'
-            ),
-            'beforeValidationOnUpdate' => array(
-                'field' => 'hashtag_updated_at',
-                'format' => 'Y-m-d H:i:s'
-            ),
-        )));
+      $this->addBehavior(new Timestampable(array(
+        'beforeValidationOnCreate' => array(
+          'field' => 'hashtag_created_at',
+          'format' => 'Y-m-d H:i:s'
+        ),
+        'beforeValidationOnUpdate' => array(
+          'field' => 'hashtag_updated_at',
+          'format' => 'Y-m-d H:i:s'
+        ),
+      )));
     }
 
-}
+    public function validation() {
+      $this->validate(new Uniqueness(array(
+        'field' => 'hashtag_name',
+        'message' => 'This hashtag already exists'
+      )));
+
+      return $this->validationHasFailed() != true;
+    }
+
+  }

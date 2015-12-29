@@ -143,3 +143,18 @@ $di['acl'] = function() use ($di) {
 	return $acl;
 };
 
+$di['flash'] = function () {
+    return new \Phalcon\Flash\Direct(array(
+        'error'   => 'alert alert-danger alert-dismissible',
+        'success' => 'alert alert-success alert-dismissible',
+        'notice'  => 'alert alert-info alert-dismissible',
+    ));
+};
+
+$di['flashSession'] = function () {
+    return new \Phalcon\Flash\Session(array(
+        'error'   => 'alert alert-danger alert-dismissible',
+        'success' => 'alert alert-success alert-dismissible',
+        'notice'  => 'alert alert-info alert-dismissible',
+    ));
+};

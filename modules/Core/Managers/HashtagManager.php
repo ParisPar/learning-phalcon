@@ -100,7 +100,7 @@ class HashtagManager extends BaseManager
         $object = Hashtag::findFirstById($id);
 
         if (!$object) {
-            throw new \Exception('Hashtag not found');
+            throw new \Exception('Hashtag not found');//Exceptions are caught in the controller
         }
 
         if (false === $object->delete()) {
