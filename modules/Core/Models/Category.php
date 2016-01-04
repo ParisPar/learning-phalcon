@@ -171,7 +171,9 @@ class Category extends Base
 
       $this->hasMany('id', 'App\Core\Models\CategoryTranslation', 'category_translation_category_id', array(
         'alias' => 'translations',
-        'foreignKey' => true
+        'foreignKey' => [
+                'action' => \Phalcon\Mvc\Model\Relation::ACTION_CASCADE,
+            ]
       ));
 
       $this->addBehavior(new Timestampable(array(
@@ -191,9 +193,12 @@ class Category extends Base
     } 
 
     //Need to overwrite method to include the category translations
-    public function toArray() {
-      //$output = parent::toArray();
+    public function toArray($columns = NULL) {
 
+      //Include basic category data (id, created_at, updated_at)
+      $output = parent::toArray();
+
+      //Include category translations
       $output['category_translations'] = $this->getTranslations()->toArray();
 
       return $output;

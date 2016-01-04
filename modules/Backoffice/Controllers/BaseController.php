@@ -6,6 +6,8 @@ class BaseController extends \App\Core\Controllers\BaseController {
 
 	public function afterExecuteRoute() {
 		$this->buildAssets();
+		$this->view->locales  = $this->getDI()->get('config')->i18n->locales->toArray();
+    $this->view->identity = $this->getDI()->get('auth')->getIdentity();
 	}
 	
 	private function buildAssets() {

@@ -63,6 +63,22 @@ $hashtags->addPost('',array(
 	'action' => 'create'
 ));
 
+// Categories group
+$categories = new \Phalcon\Mvc\Router\Group([
+    'module' => 'api',
+    'controller' => 'categories',
+]);
+
+$categories->setPrefix($versions['v1'].'/categories');
+
+$categories->addGet('',         ['action' => 'list']);
+$categories->addGet('/{id}',    ['action' => 'get']);
+$categories->addPut('/{id}',    ['action' => 'update']);
+$categories->addDelete('/{id}', ['action' => 'delete']);
+$categories->addPost('',        ['action' => 'create']);
+
+$router->mount($categories);
+
 
 
 // Add the group to the router

@@ -30,4 +30,10 @@ return new \Phalcon\Config(array(
 		'serjg89s85g90s85g9w8409g8s09g8sr09g8se09g8e90g859e0g8sseg98j'
 	),
 	'apiUrl' => 'http://test.com/learning-phalcon/api/v1/',
+	'i18n' => array(//internationalization
+		'locales' => array(
+			'en' => 'English',//ISO 639-1: two letter codes, one per language
+			'gr' => 'Greek'
+		)
+	)
 ));
