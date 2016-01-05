@@ -309,6 +309,17 @@ class User extends Base
       );
     }
 
+    public function toArray($columns = null)
+    {
+        $output = parent::toArray($columns);
+
+        unset($output['user_password']);
+
+        $output['user_profile'] = $this->profile->toArray();
+
+        return $output;
+    }
+
     public function initialize()
     {
       $this->hasOne('id', 'App\Core\Models\UserProfile', 'user_profile_user_id', array(

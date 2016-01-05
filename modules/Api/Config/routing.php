@@ -46,19 +46,15 @@ $hashtags->setPrefix($versions['v1'].'/hashtags');
 $hashtags->addGet('',array(
 	'action' => 'list'
 ));
-
 $hashtags->addGet('/{id}',array(
 	'action' => 'get'
 ));
-
 $hashtags->addPut('/{id}',array(
 	'action' => 'update'
 ));
-
 $hashtags->addDelete('/{id}',array(
 	'action' => 'delete'
 ));
-
 $hashtags->addPost('',array(
 	'action' => 'create'
 ));
@@ -68,19 +64,30 @@ $categories = new \Phalcon\Mvc\Router\Group([
     'module' => 'api',
     'controller' => 'categories',
 ]);
-
 $categories->setPrefix($versions['v1'].'/categories');
-
 $categories->addGet('',         ['action' => 'list']);
 $categories->addGet('/{id}',    ['action' => 'get']);
 $categories->addPut('/{id}',    ['action' => 'update']);
 $categories->addDelete('/{id}', ['action' => 'delete']);
 $categories->addPost('',        ['action' => 'create']);
 
-$router->mount($categories);
+// Users group
+$users = new \Phalcon\Mvc\Router\Group([
+    'module' => 'api',
+    'controller' => 'users',
+]);
+$users->setPrefix($versions['v1'].'/users');
+$users->addGet('',         ['action' => 'list']);
+$users->addGet('/{id}',    ['action' => 'get']);
+$users->addPut('/{id}',    ['action' => 'update']);
+$users->addDelete('/{id}', ['action' => 'delete']);
+$users->addPost('',        ['action' => 'create']);
+
 
 
 
 // Add the group to the router
 $router->mount($articles);
 $router->mount($hashtags);
+$router->mount($users);
+$router->mount($categories);
