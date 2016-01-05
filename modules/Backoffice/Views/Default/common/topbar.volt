@@ -13,6 +13,7 @@
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#">Welcome, {{ identity['name'] }}</a></li>
 				<li><a href="{{ url('auth/signout') }}">Sign out</a></li>
 			</ul>
 		</div>

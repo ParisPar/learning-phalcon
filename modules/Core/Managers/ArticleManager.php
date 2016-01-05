@@ -1,160 +1,245 @@
 <?php
-
 namespace App\Core\Managers;
 
 use App\Core\Models\Article;
 use App\Core\Models\ArticleTranslation;
+use App\Core\Models\ArticleCategoryArticle;
+use App\Core\Models\ArticleHashtagArticle;
 use App\Core\Models\Category;
 use App\Core\Models\Hashtag;
 use App\Core\Models\User;
 
-class ArticleManager extends BaseManager {
+use App\Core\Forms\ArticleForm;
 
-	public function find($parameters = null) {
-		return Article::find($parameters);
-	}
+class ArticleManager extends BaseManager
+{
+    /**
+     * //Add some default data that can be overwritten by the input data using array_merge()
+     * @var array
+     */
+    private $default_data = array(
+      'article_user_id' => 1,
+      'article_is_published' => 0,
+      'translations' => array(
+        'en' => array(
+          'article_translation_short_title' => 'Short title',
+          'article_translation_long_title' => 'Long title',
+          'article_translation_description' => 'Description',
+          'article_translation_slug' => '',
+          'article_translation_lang' => 'en',
+        ),
+      ),
+      'categories' => array(),
+      'hashtags' => array()
+    );
 
-	public function create($input_data) {
+    /**
+     * Get form
+     * @param  object                      $entity
+     * @param  array                       $options
+     * @return \App\Core\Forms\ArticleForm
+     */
+    public function getForm($entity = null, $options = null)
+    {
+      return new ArticleForm($entity, $options);
+    }
 
-		//Add some default data that can be overwritten by the input data using array_merge()
+    /**
+     * Find records
+     * @param  array|string                       $parameters
+     * @return multitype:\App\Core\Models\Article
+     */
+    public function find($parameters = null)
+    {
+      return Article::find($parameters);
+    }
 
-		$default_data = array(
-			'article_user_id' => 1,
-			'article_is_published' => 0,
-			'translations' => array(
-				'en' => array(
-					'article_translation_short_title' => 'Short Title',
-					'article_translation_long_title' => 'Long Title',
-					'article_translation_description' => 'Description',
-					'article_translation_slug' => '',
-					'article_translation_lang' => 'en'
-				)
-			),
-			'categories' => array(),
-			'hashTags' => array()
-		);
-		
-		//If the input arrays have the same string keys, then the later value for that key will overwrite the previous one.
-		$data = array_merge($default_data, $input_data);
+    /**
+     * Find first record
+     * @param  array|string             $parameters
+     * @return \App\Core\Models\Article
+     */
+    public function findFirst($parameters = null)
+    {
+      return Article::findFirst($parameters);
+    }
 
-		$article = new Article();
+    /**
+     * Find first record by id
+     * @param number $id
+     */
+    public function findFirstById($id)
+    {
+      return Article::findFirstById($id);
+    }
 
-		$article->setArticleIsPublished($data['article_is_published']);
+    /**
+     * Create a new article
+     *
+     * @param  array                           $data
+     * @param  string                          $language
+     * @return string|\App\Core\Models\Article
+     */
+    public function create($input_data)
+    {
+      $data = $this->prepareData($input_data);
 
-		//Create all the ArticleTranslations for the Article
-		$articleTranslations = array();
-		foreach($data['translations'] as $lang => $translation){
-			$tmp = new ArticleTranslation();
-			$tmp->assign($translation);
-			$articleTranslations[] = $tmp;
-		}
-		//Add all ArticleTranslations to the Article
-		$article->translations = $articleTranslations;
+      $article = new Article();
+      $article->setArticleIsPublished($data['article_is_published']);
 
+      $articleTranslations = array();
 
-		//Add all categories to the article
-		if(count($input_data['categories']) > 0) {
-			$article->categories = Category::find([
-				'id IN (' . implode(',', $input_data['categories']) . ')'
-			])->filter(function($category) {
-				return $category;
-			});
-		}
+        //Create all the ArticleTranslations for the Article
+      foreach ($data['translations'] as $lang => $translation) {
+        $tmp = new ArticleTranslation();
+        $tmp->assign($translation);
+        array_push($articleTranslations, $tmp);
+      }
 
+        //Add all categories to the article. No need to create them, we just get the category id from the post data
+      if ($data['categories']) {
+        $article->categories = Category::find([
+        "id IN (".$data['categories'].")",
+        ])->filter(function ($category) {
+          return $category;
+        });
+      }
 
-		if(count($input_data['hashtags']) > 0) {
-			$article->hashtags = Hashtag::find([
-				'id IN (' . implode(',', $input_data['hashtags']) . ')'
-			])->filter(function($hashtag) {
-				return $hashtag;
-			});
-		}
+      if ($data['hashtags']) {
+        $article->hashtags = Hashtag::find([
+        "id IN (".$data['hashtags'].")",
+        ])->filter(function ($hashtag) {
+          return $hashtag;
+        });
+      }
 
-		$user = User::findFirstById($data['article_user_id']);
-		if(!$user)
-			throw new \Exception('User not found', 404);
+      $user = User::findFirstById((int) $data['article_user_id']);
 
-		$article->setArticleUserId($data['article_user_id']);
+      if (!$user) {
+        throw new \Exception('User not found', 404);
+      }
 
-		return $this->save($article, 'create');
+      $article->setArticleUserId($data['article_user_id']);
 
-	}
+        //Add all ArticleTranslations to the Article
+      $article->translations = $articleTranslations;
 
-	public function delete($id) {
-		$article = Article::findFirstById($id);
+      return $this->save($article, 'create');
+    }
 
-		if(!$article)
-			throw new \Exception('Article not found', 404);
+    /**
+     * Update an existing article
+     *
+     * @param  number     $id
+     * @param  array      $input_data
+     * @throws \Exception
+     * @return unknown
+     */
+    public function update($input_data)
+    {
+      $article = Article::findFirstById($input_data['id']);
 
-		if($article->delete() === false) {
-			foreach($article->getMessages() as $message) {
-				$error[] = (string) $message;
-			}
-			throw new \Exception(json_encode($error));
-		}
-		return true;
-	}
+      if (!$article) {
+        throw new \Exception('Article not found', 404);
+      }
 
-	public function restGet(array $parameters = null, array $options = null, $page = 1, $limit = 10) {
+      $data = $this->prepareData($input_data);
 
-		$articles = $this->find($parameters);//Returns all articles by default
+      $article->setArticleIsPublished($data['article_is_published']);
+      $article->setArticleUpdatedAt(new \Phalcon\Db\RawValue('NOW()'));
 
-		//Apply the toArray() method to each article to get all related information
-		$result = $articles->filter(function($article){
-			return $article->toArray();
-		});
+      foreach ($data['translations'] as $lang => $translation) {
+        $article->getTranslations()->filter(function ($t) use ($lang, $translation) {
+          if ($t->getArticleTranslationLang() == $lang) {
+            $t->assign($translation);
+            $t->update();
+          }
+        });
+      }
 
-		$paginator = new \Phalcon\Paginator\Adapter\NativeArray([
-			'data' => $result,
-			'limit' => $limit,
-			'page' => $page
-		]);
+      $results = ArticleCategoryArticle::findByArticleId($input_data['id']);
 
-		$data = $paginator->getPaginate();
+      if ($results) {
+        $results->delete();
+      }
 
-		if($data->total_items > 0)
-			return $data;
+      if ($data['categories']) {
+        $article->categories = Category::find([
+        "id IN (".$data['categories'].")",
+        ])->filter(function ($category) {
+          return $category;
+        });
+      }
 
-	}
+      $results = ArticleHashtagArticle::findByArticleId($input_data['id']);
 
-	//Example: $curl -i -X PUT -H "Content-Type:application/json" -d '[{"article_s_published": 0}]' 'http://test.com/learning-phalcon/api/v1/articles/18'
-	public function restUpdate($id, $data) {
+      if ($results) {
+        $results->delete();
+      }
 
-		$article = Article::findFirstById((int) $id);
+      if ($data['hashtags']) {
+        $article->hashtags = Hashtag::find([
+        "id IN (".$data['hashtags'].")",
+        ])->filter(function ($hashtag) {
+          return $hashtag;
+        });
+      }
 
-		if(!$article)
-			throw new \Exception('Not found', 404);
+      $user = User::findFirstById((int) $data['article_user_id']);
 
-		$article->setArticleIsPublished($data[0]['article_is_published']);
+      if (!$user) {
+        throw new \Exception('User not found', 404);
+      }
 
-		if($article->update() == false) 
-			foreach($article->getMessages() as $message)
-				throw new \Exception($message->getMessage(), 500);
-		
-		return $article->toArray();
+      $article->setArticleUserId($data['article_user_id']);
 
-	}
+      return $this->save($article, 'update');
+    }
 
-	public function restDelete($id) {
+    /**
+     * Delete articles
+     *
+     * @param  number     $id
+     * @throws \Exception
+     * @return boolean
+     */
+    public function delete($id)
+    {
+      $article = Article::findFirstById($id);
 
-		$article = Article::findFirstById((int) $id);
+      if (!$article) {
+        throw new \Exception('Article not found', 404);
+      }
 
-		if(!$article)
-			throw new \Exception('Not found', 404);
+      if (false === $article->delete()) {
+        foreach ($article->getMessages() as $message) {
+          $error[] = (string) $message;
+        }
 
-		if($article->delete() == false) 
-			foreach($article->getMessages() as $message)
-				throw new \Exception($message->getMessage(), 500);
-		
-		return true;
-	}
+        throw new \Exception(json_encode($error));
+      }
 
-	//Example: $curl -i -X POST -H "Content-Type:application/json" -d '{"article_user_id":16,"article_is_published":1,"translations":{"en":{"article_translation_short_title":"Test API create","article_translation_long_title":"Test API create","article_translation_description":"Test API create description","article_translation_slug":"test-api-create","article_translation_lang":"en"}},"categories":[25,26],"hashtags":[1]}' 'http://test.com/learning-phalcon/api/v1/articles/18'
-	public function restCreate($data) {
+      return true;
+    }
 
-		$result = $this->create($data);
+    //
+    private function prepareData($input_data)
+    {   
+        //If the input arrays have the same string keys, then the later value for that key will overwrite the previous one.
+      $data = array_merge($this->default_data, $input_data);
 
-		return $result->toArray();
-	}	
-	
-}
+      if (!is_array($data['categories'])) {
+        $data['categories'] = $data['categories'] != '' ? array_map('trim', explode(',', $data['categories'])) : null;
+      } else {
+        $data['categories'] = implode(',', $data['categories']);
+      }
+
+      if (!is_array($data['hashtags'])) {
+        $data['hashtags'] = $data['hashtags'] != '' ? array_map('trim', explode(',', $data['hashtags'])) : null;
+      } else {
+        $data['hashtags'] = implode(',', $data['hashtags']);
+      }
+
+      return $data;
+    }
+  }
