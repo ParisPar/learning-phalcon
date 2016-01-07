@@ -2,3 +2,4 @@ vendor
 composer.lock
 public/assets/default/bower_components/
 cache/
+tests/_output/*

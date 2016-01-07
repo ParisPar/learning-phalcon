@@ -1,6 +1,7 @@
 {
     "require": {
         "phalcon/incubator": "dev-master",
-        "crada/php-apidoc": "@devcomp"
+        "crada/php-apidoc": "@dev",
+        "codeception/codeception": "*"
     }
 }
